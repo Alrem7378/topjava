@@ -20,6 +20,6 @@ public class UserMealWithExceed {
 
     @Override
     public String toString() {
-        return dateTime.toLocalDate().toString() + " " + dateTime.toLocalTime().toString() + " " + description + " " + calories + " " + exceed;
+        return dateTime.toLocalDate() + " " + dateTime.toLocalTime() + " " + description + " " + calories + " " + exceed;
     }
 }
