@@ -2,41 +2,36 @@ package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
 
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
-public class MealMemoryImp implements RepoMeal {
+public class MealMemoryRepo implements RepoMeal {
     private Map<Integer, Meal> meals = new ConcurrentHashMap<>();
-    private static AtomicInteger mealCurId = new AtomicInteger();
+    private AtomicInteger mealCurId = new AtomicInteger();
 
     @Override
-    public void addMeal(Meal meal) {
-        int id = getMealCurId();
+    public void add(Meal meal) {
+        int id = getCurId();
         meal.setId(id);
         meals.put(id, meal);
     }
 
     @Override
-    public void deleteMeal(int mealId) {
+    public void delete(int mealId) {
         meals.remove(mealId);
     }
 
     @Override
-    public void updateMeal(Meal meal) {
+    public void update(Meal meal) {
         meals.replace(meal.getId(), meal);
 
     }
 
     @Override
-    public List<Meal> getAllMeal() {
+    public List<Meal> getAll() {
         return new ArrayList<>(meals.values());
     }
 
@@ -45,7 +40,7 @@ public class MealMemoryImp implements RepoMeal {
         return meals.get(id);
     }
 
-    public int getMealCurId(){
+    public int getCurId(){
         return mealCurId.incrementAndGet();
     }
 

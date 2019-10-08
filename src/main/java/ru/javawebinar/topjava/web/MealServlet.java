@@ -1,13 +1,10 @@
 package ru.javawebinar.topjava.web;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
-import ru.javawebinar.topjava.repository.MealMemoryImp;
+import ru.javawebinar.topjava.repository.MealMemoryRepo;
 import ru.javawebinar.topjava.repository.RepoMeal;
 import ru.javawebinar.topjava.util.MealsUtil;
-import sun.rmi.runtime.Log;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,10 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -31,22 +25,21 @@ public class MealServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        repoMeal = new MealMemoryImp();
-        MealsUtil.getInitmap(repoMeal);
+        repoMeal = new MealMemoryRepo();
+        MealsUtil.initMap(repoMeal);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         if (action == null) {
-            mealsPageForward(request, response);
-            return;
+            action = "";
         }
         Meal meal = null;
 
         switch (action) {
             case "delete":
-                repoMeal.deleteMeal(Integer.parseInt(request.getParameter("id")));
+                repoMeal.delete(Integer.parseInt(request.getParameter("id")));
                 response.sendRedirect("meals");
                 return;
             case "edit":
@@ -71,17 +64,17 @@ public class MealServlet extends HttpServlet {
         String calories = request.getParameter("calories");
         Meal meal = new Meal(LocalDateTime.parse(dateTime), description, Integer.parseInt(calories));
         if (id.equals("")) {
-            repoMeal.addMeal(meal);
+            repoMeal.add(meal);
         } else {
             meal.setId(Integer.parseInt(id));
-            repoMeal.updateMeal(meal);
+            repoMeal.update(meal);
         }
 
         response.sendRedirect("meals");
     }
 
     private void mealsPageForward(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<MealTo> mealsTo = MealsUtil.getFiltered(repoMeal.getAllMeal(), LocalTime.MIN, LocalTime.MAX, 2000);
+        List<MealTo> mealsTo = MealsUtil.getFiltered(repoMeal.getAll(), LocalTime.MIN, LocalTime.MAX, MealsUtil.getDefaultCaloriesPerDay());
         request.setAttribute("mealsList", mealsTo);
         request.setAttribute("dateTimeFormatter", dateTimeFormatter);
         request.getRequestDispatcher("/meals.jsp").forward(request, response);

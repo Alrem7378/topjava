@@ -9,17 +9,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
     private static final int DEFAULT_CALORIES_PER_DAY = 2000;
 
+    public static int getDefaultCaloriesPerDay() {
+        return DEFAULT_CALORIES_PER_DAY;
+    }
 
     public static List<MealTo> getFiltered(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
@@ -33,13 +30,13 @@ public class MealsUtil {
                 .collect(Collectors.toList());
     }
 
-    public static void getInitmap(RepoMeal repoMeal) {
-        repoMeal.addMeal(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
-        repoMeal.addMeal(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
-        repoMeal.addMeal(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
-        repoMeal.addMeal(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
-        repoMeal.addMeal(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
-        repoMeal.addMeal(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
+    public static void initMap(RepoMeal repoMeal) {
+        repoMeal.add(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
+        repoMeal.add(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
+        repoMeal.add(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
+        repoMeal.add(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
+        repoMeal.add(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
+        repoMeal.add(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
     }
 
 
