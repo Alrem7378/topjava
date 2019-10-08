@@ -40,7 +40,7 @@ public class MealMemoryRepo implements RepoMeal {
         return meals.get(id);
     }
 
-    public int getCurId(){
+    private int getCurId(){
         return mealCurId.incrementAndGet();
     }
 
