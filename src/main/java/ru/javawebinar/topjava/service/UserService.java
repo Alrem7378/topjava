@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return repository.getAll();
+        return (List<User>) repository.getAll();
     }
 
     public void update(User user) throws NotFoundException {
