@@ -8,6 +8,8 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.*;
@@ -39,10 +41,13 @@ public class MealService {
         return (List<Meal>) repository.getAll(userId);
     }
 
+    public List<Meal> getAllFiltered(int userId, LocalDate starDate, LocalDate endDate) {
+        return (List<Meal>) repository.getAllFilteredByDate(userId,starDate, endDate);
+    }
+
     public void update(Meal meal, int id, int userId) throws NotFoundException {
         assureIdConsistent(meal, id);
         checkNotFoundWithId(repository.save(meal, userId), id);
     }
-
 
 }

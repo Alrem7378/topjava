@@ -5,9 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,9 +22,9 @@ public class InMemoryMealRepository implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
     private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepository.class);
 
-    {
+  /*  {
         MealsUtil.MEALS.forEach(meal -> save(meal, SecurityUtil.authUserId()));
-    }
+    }*/
 
     @Override
     public Meal save(Meal meal, int userId) {
@@ -58,6 +61,18 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Collection<Meal> getAll(int userId) {
         log.info("user id {}", userId);
+        return getAllFilteredByUser(userId);
+    }
+
+    public Collection<Meal> getAllFilteredByDate(int userId, LocalDate starDate, LocalDate endDate) {
+        log.info("user id {}", userId);
+        return getAllFilteredByUser(userId).stream()
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), starDate, endDate))
+                .collect(Collectors.toList());
+    }
+
+    public Collection<Meal> getAllFilteredByUser(int userId) {
+        log.info("user id {}", userId);
         return repository.values().stream()
                 .filter(meal -> meal.getUserId() == userId)
                 .sorted((o1, o2) -> -o1.getDateTime().compareTo(o2.getDateTime()))
@@ -65,7 +80,7 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     private boolean checkUserId(Meal meal, int userId) {
-        return meal.getUserId() == userId;
+        return meal != null && meal.getUserId() == userId;
     }
 }
 

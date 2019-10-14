@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -23,9 +27,19 @@ public class MealRestController {
         this.service = service;
     }*/
 
-    public List<Meal> getAll() {
+    public List<MealTo> getAll() {
         log.info("getAll");
-        return service.getAll(authUserId());
+        return MealsUtil.getTos(service.getAll(authUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
+    }
+
+    public List<MealTo> getAllFiltered(LocalDate starDate, LocalDate endDate, LocalTime starTime, LocalTime endTime) {
+        log.info("getAllFiltered");
+        starDate = starDate != null ? starDate: LocalDate.MIN;
+        endDate = endDate != null ? endDate: LocalDate.MAX;
+        starTime = starTime != null ? starTime: LocalTime.MIN;
+        endTime = endTime != null ? endTime: LocalTime.MAX;
+        log.info("startDate {}, endDate {}, startTime {}, endTime {}", starDate, endDate, starTime, endTime);
+        return MealsUtil.getFilteredTos(service.getAllFiltered(authUserId(), starDate, endDate), MealsUtil.DEFAULT_CALORIES_PER_DAY, starTime, endTime);
     }
 
     public void delete(int id) {
