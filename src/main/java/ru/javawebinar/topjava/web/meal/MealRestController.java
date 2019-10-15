@@ -23,10 +23,6 @@ public class MealRestController {
     private MealService service;
 
 
-   /* public MealRestController(MealService service) {
-        this.service = service;
-    }*/
-
     public List<MealTo> getAll() {
         log.info("getAll");
         return MealsUtil.getTos(service.getAll(authUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
