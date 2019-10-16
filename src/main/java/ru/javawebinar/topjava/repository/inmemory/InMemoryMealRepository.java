@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,13 +30,13 @@ public class InMemoryMealRepository implements MealRepository {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             log.info("user id {}, save {}", userId, meal);
-            getRepoByUserId(userId).put(meal.getId(), meal);
+            getOrCreateRepoByUserId(userId).put(meal.getId(), meal);
             return meal;
         }
         // treat case: update, but not present in storage
 
         log.info("user id {}, save {}", userId, meal);
-        return getRepoByUserId(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        return getOrCreateRepoByUserId(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
@@ -64,13 +65,18 @@ public class InMemoryMealRepository implements MealRepository {
 
     private List<Meal> getAllFilteredByUser(int userId, Predicate<Meal> filter) {
         log.info("user id {}", userId);
-        return getRepoByUserId(userId).values().stream()
+        Map<Integer, Meal> repoByUser = getRepoByUserId(userId);
+        return repoByUser==null? new ArrayList<>() : repoByUser.values().stream()
                 .filter(filter)
                 .sorted((o1, o2) -> -o1.getDateTime().compareTo(o2.getDateTime()))
                 .collect(Collectors.toList());
     }
 
     private Map<Integer, Meal> getRepoByUserId(int userId) {
+        return repository.get(userId);
+    }
+
+    private Map<Integer, Meal> getOrCreateRepoByUserId(int userId) {
         return repository.computeIfAbsent(userId, id -> new HashMap<>());
     }
 
