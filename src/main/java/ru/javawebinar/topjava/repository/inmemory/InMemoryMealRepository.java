@@ -65,15 +65,15 @@ public class InMemoryMealRepository implements MealRepository {
 
     private List<Meal> getAllFilteredByUser(int userId, Predicate<Meal> filter) {
         log.info("user id {}", userId);
-        Map<Integer, Meal> repoByUser = getRepoByUserId(userId);
-        return repoByUser==null? new ArrayList<>() : repoByUser.values().stream()
+        return getRepoByUserId(userId).values().stream()
                 .filter(filter)
                 .sorted((o1, o2) -> -o1.getDateTime().compareTo(o2.getDateTime()))
                 .collect(Collectors.toList());
     }
 
     private Map<Integer, Meal> getRepoByUserId(int userId) {
-        return repository.get(userId);
+        Map<Integer, Meal> repoByUser = repository.get(userId);
+        return repoByUser == null ? new HashMap<>(): repoByUser;
     }
 
     private Map<Integer, Meal> getOrCreateRepoByUserId(int userId) {
