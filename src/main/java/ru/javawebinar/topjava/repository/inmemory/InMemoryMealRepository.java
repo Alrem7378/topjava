@@ -72,8 +72,7 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     private Map<Integer, Meal> getRepoByUserId(int userId) {
-        Map<Integer, Meal> repoByUser = repository.get(userId);
-        return repoByUser == null ? new HashMap<>(): repoByUser;
+        return repository.getOrDefault(userId, new HashMap<>());
     }
 
     private Map<Integer, Meal> getOrCreateRepoByUserId(int userId) {
