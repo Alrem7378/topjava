@@ -1,8 +1,8 @@
 package ru.javawebinar.topjava.service;
 
 import org.springframework.test.context.ActiveProfiles;
-import ru.javawebinar.topjava.ActiveJdbcProfileResolver;
+import ru.javawebinar.topjava.Profiles;
 
-@ActiveProfiles(resolver = ActiveJdbcProfileResolver.class)
+@ActiveProfiles(Profiles.JDBC)
 public class UserServiceJdbcTest extends UserServiceTest {
 }
