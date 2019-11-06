@@ -19,7 +19,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 public abstract class UserServiceTest extends ServiceTest {
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     @Autowired
     private CacheManager cacheManager;
@@ -28,6 +28,8 @@ public abstract class UserServiceTest extends ServiceTest {
     public void setUp() throws Exception {
         cacheManager.getCache("users").clear();
     }
+
+
 
     @Test
     public void create() throws Exception {

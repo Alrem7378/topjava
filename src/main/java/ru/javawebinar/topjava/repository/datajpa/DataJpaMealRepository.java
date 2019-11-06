@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -43,14 +42,20 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        //return crudRepository.findAll(userId);
-        return crudRepository.findByUserOrderByDateTimeDesc(crudUserRepository.getOne(userId));
+        return crudRepository.findAll(userId);
+        //  return crudRepository.findByUserOrderByDateTimeDesc(crudUserRepository.getOne(userId));
+    }
+
+    @Override
+    public Meal getWithUser(int id, int useId) {
+        return crudRepository.getWithUser(id, useId);
     }
 
     @Override
     public List<Meal> getBetweenInclusive(LocalDate startDate, LocalDate endDate, int userId) {
-       // return crudRepository.findAllBetweem(userId, getStartInclusive(startDate), getEndExclusive(endDate));
-        return crudRepository.findByUserAndDateTimeGreaterThanEqualAndDateTimeLessThanOrderByDateTimeDesc(crudUserRepository.getOne(userId)
-                , getStartInclusive(startDate), getEndExclusive(endDate));
+        return crudRepository.findAllBetweem(userId, getStartInclusive(startDate), getEndExclusive(endDate));
+        //  return crudRepository.findByUserAndDateTimeGreaterThanEqualAndDateTimeLessThanOrderByDateTimeDesc(crudUserRepository.getOne(userId)
+        //        , getStartInclusive(startDate), getEndExclusive(endDate));
+
     }
 }
