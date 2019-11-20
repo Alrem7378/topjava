@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.web;
+package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,32 +22,31 @@ public class JspMealController extends AbstractMealController {
 
 
     @GetMapping
-    public String getMeals(Model model) {
+    public String getAll(Model model) {
         model.addAttribute("meals", getAll());
         return "meals";
     }
 
     @GetMapping("/delete")
-    public String deleteMeal(HttpServletRequest request) {
+    public String delete(HttpServletRequest request) {
         delete(getId(request));
         return "redirect:/meals";
     }
 
     @GetMapping("/update")
-    public String updateMeal(Model model, HttpServletRequest request) {
+    public String update(Model model, HttpServletRequest request) {
         model.addAttribute("meal", get(getId(request)));
         return "mealForm";
     }
 
     @GetMapping("/create")
-    public String createMeal(Model model) {
+    public String create(Model model) {
         model.addAttribute("meal", new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
-        model.addAttribute("action", "create");
         return "mealForm";
     }
 
     @GetMapping("/filter")
-    public String getFilteredMeals(Model model, HttpServletRequest request) {
+    public String getFiltered(Model model, HttpServletRequest request) {
         LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
         LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
         LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
@@ -58,7 +57,7 @@ public class JspMealController extends AbstractMealController {
 
 
     @PostMapping
-    public String saveMeal(HttpServletRequest request) {
+    public String save(HttpServletRequest request) {
         Meal meal = new Meal(
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
