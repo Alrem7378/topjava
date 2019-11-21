@@ -15,9 +15,9 @@ import static ru.javawebinar.topjava.UserTestData.*;
 public class DataJpaUserServiceTest extends AbstractHiberCache {
     @Test
     public void getWithMeals() throws Exception {
-        User user = service.getWithMeals(USER_ID);
-        assertMatch(user, USER);
-        MealTestData.assertMatch(user.getMeals(), MealTestData.MEALS);
+        User user = service.getWithMeals(ADMIN_ID);
+        assertMatch(user, ADMIN);
+        MealTestData.assertMatch(user.getMeals(), MealTestData.AD_MEALS);
     }
 
     @Test(expected = NotFoundException.class)

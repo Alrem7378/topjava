@@ -13,7 +13,7 @@ public abstract class AbstractHiberCache extends AbstractUserServiceTest {
     @Before
     @Override
     public void setUp() throws Exception {
-        cacheManager.getCache("users").clear();
-            jpaUtil.clear2ndLevelHibernateCache();
+        super.setUp();
+        jpaUtil.clear2ndLevelHibernateCache();
     }
 }

@@ -103,9 +103,9 @@ public class JdbcUserRepository implements UserRepository {
                 "UPDATE users SET name=:name, email=:email, password=:password, " +
                         "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource) == 0) {
             return null;
+        } else {
+            namedParameterJdbcTemplate.update("delete from user_roles WHERE user_id=:id", parameterSource);
         }
-        namedParameterJdbcTemplate.update("delete from user_roles WHERE user_id=:id", parameterSource);
-
         if (!CollectionUtils.isEmpty(user.getRoles())) {
             SqlParameterSource[] arRoles = user.getRoles().stream()
                     .map(role -> new MapSqlParameterSource()
